@@ -9,7 +9,8 @@ return document.querySelector(el);
 }
 */
 
-let modalQt = 1; //var criada para ser q quantidade de pizzas pedidas no modal
+let modalQt = 1;                                                          //var criada para uso do botão mais + do modal, esse botão aumenta a quantidade de pizza pedida ao usuário                                                       
+
 
 //forma reduzida do código acima
 const c = (el)=>document.querySelector(el);                             //função para substituir o document... posso fazer essa função anõnima sem o uso das chaves, já q é so pra retornar
@@ -53,8 +54,11 @@ pizzaJson.map( (item, index) => {                                   //o método 
         pizzaItem.setAttribute('data-key', index);                            //explicação acima linha 27.             
         let key = e.target.closest('.pizza-item').getAttribute('data-key');  //target se referencia ao próprio elemento, como aqui se trata de um click, ele sente esse clcik da tag a do href do html, se vc olhar um pouquinho acima de desse bloco verá q ele se referencia a tag a
                                                                             //closest retorna o ancestral mais próximo, em relação ao elemento atual, que possui o seletor fornecido como parâmetro, o parâmetro dele ou o seletor dele é pizza item, ele irá achar a class pizza-item mais próximo da tag a
-        modalQt = 1;
                                                                            //por fim dei um getAttribute ou seja estou pegando o atributo data-key q foi criado neste escopo, assim tenho a chave de cada pizza, saberei qual posição do meu array clikado ou qual pizza foi clikada, veja isso no console
+
+        modalQt = 1;                                                       //var criada para uso do botão mais + do modal, esse botão aumenta a quantidade de pizza pedida ao usuário                                                       
+                                                                          //assim q o modal abrir a var está presente aqui resetando o número para um,sem esta var declarada com um, aparecerá a última quantidade escolhida, caso o usuário feche e abre de novo o modal, esta var foi declarada como global
+                                                                        
 
         console.log(`PIZZA CLIKADA: ${key}`);                            //este console mostra exatamente qual pizza clikada, com a interação do setAttribute e getAttribute
 
@@ -77,7 +81,7 @@ pizzaJson.map( (item, index) => {                                   //o método 
                                                                                    
         });
 
-        c('.pizzaInfo--qt').innerHTML = modalQt;
+        //c('.pizzaInfo--qt').innerHTML = modalQt;
 
         c('.pizzaWindowArea').style.opacity = 0;                         //somente para que o modal nao abra de froma brusca e sim lentamente
         c('.pizzaWindowArea').style.display = 'flex';
@@ -100,4 +104,20 @@ function closeModal() {
 }
 cs('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton').forEach((item)=>{  //aqui chamamos as classes e fizemos um forEach pra poder add nas duas classe, item é apenas o parâmetro da função q vai ser executada
     item.addEventListener('click', closeModal);                                  //por fim add o evento de escuta que é o click e chamei a function closeModal pra ser executada
-})
+});
+
+
+
+//Eventos do botão de menos e mais do Modal
+c('.pizzaInfo--qtmenos').addEventListener('click', ()=>{
+    if(modalQt > 1) {
+    modalQt--;
+    c('.pizzaInfo--qt').innerHTML = modalQt;
+    }
+});
+
+c('.pizzaInfo--qtmais').addEventListener('click', ()=>{
+    modalQt++;
+    c('.pizzaInfo--qt').innerHTML = modalQt;
+
+});
