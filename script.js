@@ -44,6 +44,15 @@ pizzaJson.map( (item, index) => {                                  //o método m
         c('.pizzaBig img').src = pizzaJson[key].img;                    //falta uma img
         c('.pizzaInfo h1').innerHTML = pizzaJson[key].name;            //key é área clikada e também é esta var acima e name é o name do array pizzaJson q contém os nomes de todas as pizzas
         c('.pizzaInfo--desc').innerHTML = pizzaJson[key].description;
+        c('.pizzaInfo--actualPrice').innerHTML = `R$ ${pizzaJson[key].price.toFixed(2)}`;
+        cs('.pizzaInfo--size').forEach((size, sizeIndex)=>{                                 //forEach = vai rodar esta função para cada um dos itens ou das class escolhida, temos três class com o mesmo valor, por isso fiz um forEach pra aplicar a função em cada uma delas
+                                                                                           //O parâmetro chamado size é o item do array pizzaJson, chamei de outro nome pq item já existe nesse contexto, e o segundo parâmetro é a ordem dos itens de 0 á 6. os nomes dos parâmetros podem ser qq um
+
+          size.querySelector('span').innerHTML =  pizzaJson[key].sizes[sizeIndex];        //sizeIndex é o valor atual que foi clikado pelo usuário, por isso q tenho q colocar sizes[sizeIndex], se coloco só size
+                                                                                         //ele vai buscar de forma aleátória na array, com sizeIndex ele busca a propriedade em questão clicada pelo user  
+                                                                                   
+
+        });
 
         c('.pizzaWindowArea').style.opacity = 0;
         c('.pizzaWindowArea').style.display = 'flex';
