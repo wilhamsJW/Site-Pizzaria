@@ -48,7 +48,7 @@ pizzaJson.map( (item, index) => {                                   //o método 
 
 
         //setAttribute e getAttribute me trás as propriedades do array e a posição de cada um.
-        //com isto consegui postar no modal exatamente a pista clickada de forma dinâmica, sem precisar ter que fazer vários modals no css
+        //com isto consegui postar no modal exatamente a pizza clickada de forma dinâmica, sem precisar ter que fazer vários modals no css
 
 
         pizzaItem.setAttribute('data-key', index);                            //explicação acima linha 27.             
@@ -67,7 +67,7 @@ pizzaJson.map( (item, index) => {                                   //o método 
         c('.pizzaInfo--desc').innerHTML = pizzaJson[key].description;
         c('.pizzaInfo--actualPrice').innerHTML = `R$ ${pizzaJson[key].price.toFixed(2)}`;
 
-        c('.pizzaInfo--size.selected').classList.remove('selected');                         //size.selected = estou me referindo a ambas as class se eu coloco um espaço me refiro a outro elemento/ estou retirando a marcação de azul feita no css, a cor azul é inidicada quando o usuário clikar e escolher o tamanho da pizza
+        //c('.pizzaInfo--size.selected').classList.remove('selected');                         //size.selected = estou me referindo a ambas as class se eu coloco um espaço me refiro a outro elemento/ estou retirando a marcação de azul feita no css, a cor azul é inidicada quando o usuário clikar e escolher o tamanho da pizza
                                                                                             
 
         cs('.pizzaInfo--size').forEach((size, sizeIndex)=>{                                 //forEach = vai rodar esta função para cada um dos itens ou das class escolhida, temos três class com o mesmo valor, por isso fiz um forEach pra aplicar a função em cada uma delas
@@ -122,12 +122,13 @@ c('.pizzaInfo--qtmais').addEventListener('click', ()=>{
 
 });
 
-cs('.pizzaInfo--size').forEach((size, sizeIndex)=>{                                
-    
-if(sizeIndex == 2) {                                                       
-size.classList.add('selected');
-}  
-size.querySelector('span').innerHTML =  pizzaJson[key].sizes[sizeIndex];     
 
+//Botão Pequeno, Médio e Grande
+cs('.pizzaInfo--size').forEach((size, sizeIndex)=>{                         //size é o parâmetro equivalente ao nome de cada pizza clikada ou do item q foi clikado, sizeIndex gera  aposição do array                  
+    
+    size.addEventListener('click', (e)=>{                                 //pizzaInfo--size.selected é a class q por padrão está sendo add ao botão de pizza grande como marketing, então após o click peco  
+        c('.pizzaInfo--size.selected').classList.remove('selected');     //pra q essa class seja removida
+        size.classList.add('selected');                                 //nesta linha peço para o size add a class selected, size é o parâmetro da pizza em questão clikada, então a pista clikada passará obter a class selectede e será mostrada ao usuário o tamanho escolhido por ele da pizza 
+    });
 
 });
