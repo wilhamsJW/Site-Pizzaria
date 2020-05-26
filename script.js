@@ -110,14 +110,24 @@ cs('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton').forEach((item)=>{
 
 //Eventos do botão de menos e mais do Modal
 c('.pizzaInfo--qtmenos').addEventListener('click', ()=>{
-    if(modalQt > 1) {
+    if(modalQt > 1) {                                          //essa verificação é pra a ação ser executada apenas se a var for maior q 1, para que o usuário não fique apertando o botão menos e gerando números negativos, pois ele não pode pedir -5 pizzas por exemplo
     modalQt--;
-    c('.pizzaInfo--qt').innerHTML = modalQt;
+    c('.pizzaInfo--qt').innerHTML = modalQt;                  //modalQt é var q está sendo alterada pelo click do usuário
     }
 });
 
 c('.pizzaInfo--qtmais').addEventListener('click', ()=>{
     modalQt++;
-    c('.pizzaInfo--qt').innerHTML = modalQt;
+    c('.pizzaInfo--qt').innerHTML = modalQt;               //modalQt é var q está sendo alterada pelo click do usuário
+
+});
+
+cs('.pizzaInfo--size').forEach((size, sizeIndex)=>{                                
+    
+if(sizeIndex == 2) {                                                       
+size.classList.add('selected');
+}  
+size.querySelector('span').innerHTML =  pizzaJson[key].sizes[sizeIndex];     
+
 
 });
