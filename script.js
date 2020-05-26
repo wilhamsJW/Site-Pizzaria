@@ -9,6 +9,8 @@ return document.querySelector(el);
 }
 */
 
+let modalQt = 1; //var criada para ser q quantidade de pizzas pedidas no modal
+
 //forma reduzida do código acima
 const c = (el)=>document.querySelector(el);
 const cs = (el)=>document.querySelectorAll(el);
@@ -36,7 +38,7 @@ pizzaJson.map( (item, index) => {                                  //o método m
 
         pizzaItem.setAttribute('data-key', index);                            //explicação acima linha 24.             
         let key = e.target.closest('.pizza-item').getAttribute('data-key');  //target se referencia ao próprio elemento, como aqui se trata de um click, ele sente esse clcik da tag a do href do html, se vc olhar um pouquinho acima de desse bloco verá q ele se referencia a tag a
-                                                                            //closest retorna o ancestral mais próximo, em relação ao elemento atual, que possui o seletor fornecido como parâmetro, o parâmetro dele ou o seletor dele é pizza item, ele irá achar a class pizza-item mais próximo da tag a
+        modalQt = 1;                                                                    //closest retorna o ancestral mais próximo, em relação ao elemento atual, que possui o seletor fornecido como parâmetro, o parâmetro dele ou o seletor dele é pizza item, ele irá achar a class pizza-item mais próximo da tag a
                                                                            //por fim dei um getAttribute ou seja estou pegando o atributo data-key q foi criado neste escopo, assim tenho a chave de cada pizza, saberei qual posição do meu array clikado ou qual pizza foi clikada, veja isso no console
 
         console.log(`PIZZA CLIKADA: ${key}`);                            //este console mostra exatamente qual pizza clikada, com a interação do setAttribute e esta linha de código acima
@@ -45,14 +47,22 @@ pizzaJson.map( (item, index) => {                                  //o método m
         c('.pizzaInfo h1').innerHTML = pizzaJson[key].name;            //key é área clikada e também é esta var acima e name é o name do array pizzaJson q contém os nomes de todas as pizzas
         c('.pizzaInfo--desc').innerHTML = pizzaJson[key].description;
         c('.pizzaInfo--actualPrice').innerHTML = `R$ ${pizzaJson[key].price.toFixed(2)}`;
+
+        c('.pizzaInfo--size.selected').classList.remove('selected');                         //size.selected = estou me referindo a ambas as class se eu coloco um espaço me refiro a outro elemento/ estou retirando a marcação de azul feita no css, a cor azul é inidicada quando o usuário clikar e escolher o tamanho da pizza
+                                                                                            
+
         cs('.pizzaInfo--size').forEach((size, sizeIndex)=>{                                 //forEach = vai rodar esta função para cada um dos itens ou das class escolhida, temos três class com o mesmo valor, por isso fiz um forEach pra aplicar a função em cada uma delas
                                                                                            //O parâmetro chamado size é o item do array pizzaJson, chamei de outro nome pq item já existe nesse contexto, e o segundo parâmetro é a ordem dos itens de 0 á 6. os nomes dos parâmetros podem ser qq um
 
-          size.querySelector('span').innerHTML =  pizzaJson[key].sizes[sizeIndex];        //sizeIndex é o valor atual que foi clikado pelo usuário, por isso q tenho q colocar sizes[sizeIndex], se coloco só size
-                                                                                         //ele vai buscar de forma aleátória na array, com sizeIndex ele busca a propriedade em questão clicada pelo user  
+          if(sizeIndex == 2) {                                                            //add a classList selected para ficar marcada a opção da pizza grande, 2 é o index do tamanho da pizza grande 
+              size.classList.add('selected');
+          }  
+          size.querySelector('span').innerHTML =  pizzaJson[key].sizes[sizeIndex];      //sizeIndex é o valor atual que foi clikado pelo usuário, por isso q tenho q colocar sizes[sizeIndex], se coloco só size
+                                                                                       //ele vai buscar de forma aleátória na array, com sizeIndex ele busca a propriedade em questão clicada pelo user  
                                                                                    
-
         });
+
+        c('.pizzaInfo--qt').innerHTML = modalQt;
 
         c('.pizzaWindowArea').style.opacity = 0;
         c('.pizzaWindowArea').style.display = 'flex';
