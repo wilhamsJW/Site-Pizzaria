@@ -12,7 +12,7 @@ return document.querySelector(el);
 let modalQt = 1; //var criada para ser q quantidade de pizzas pedidas no modal
 
 //forma reduzida do código acima
-const c = (el)=>document.querySelector(el);
+const c = (el)=>document.querySelector(el);                             //função para substituir o document... posso fazer essa função anõnima sem o uso das chaves, já q é so pra retornar
 const cs = (el)=>document.querySelectorAll(el);
 
 //add elementos no bowser
@@ -33,7 +33,13 @@ pizzaJson.map( (item, index) => {                                   //o método 
     pizzaItem.querySelector('.pizza-item--name').innerHTML = item.name;         //está add os nomes das pizzas conforme o array pizzaJson, item.name é uma propriedade de pizzaJson, 
     pizzaItem.querySelector('.pizza-item--desc').innerHTML = item.description; //item é o parâmetro e name é a propriedade de pizzaJson
     pizzaItem.querySelector('.pizza-item--price').innerHTML = `R$ ${item.price.toFixed(2)}`;
-    
+
+
+
+
+
+
+    //Evento de click para abrir o modal 
     pizzaItem.querySelector('a').addEventListener('click', (e) => {              //função criada para o modal(area mostrada após receber um click em cima de uma pizza), ao aparcer vai receber um efeito simples,
 
         e.preventDefault();                                                    //evita um comportamento padrão de carregamento da página ao clickar na foto 
@@ -44,7 +50,7 @@ pizzaJson.map( (item, index) => {                                   //o método 
         //com isto consegui postar no modal exatamente a pista clickada de forma dinâmica, sem precisar ter que fazer vários modals no css
 
 
-        pizzaItem.setAttribute('data-key', index);                            //explicação acima linha 26.             
+        pizzaItem.setAttribute('data-key', index);                            //explicação acima linha 27.             
         let key = e.target.closest('.pizza-item').getAttribute('data-key');  //target se referencia ao próprio elemento, como aqui se trata de um click, ele sente esse clcik da tag a do href do html, se vc olhar um pouquinho acima de desse bloco verá q ele se referencia a tag a
                                                                             //closest retorna o ancestral mais próximo, em relação ao elemento atual, que possui o seletor fornecido como parâmetro, o parâmetro dele ou o seletor dele é pizza item, ele irá achar a class pizza-item mais próximo da tag a
         modalQt = 1;
@@ -67,13 +73,13 @@ pizzaJson.map( (item, index) => {                                   //o método 
               size.classList.add('selected');
           }  
           size.querySelector('span').innerHTML =  pizzaJson[key].sizes[sizeIndex];      //sizeIndex é o valor atual que foi clikado pelo usuário, por isso q tenho q colocar sizes[sizeIndex], se coloco só size
-                                                                                       //ele vai buscar de forma aleátória na array, com sizeIndex ele busca a propriedade em questão clicada pelo user  
+                                                                                       //ele vai buscar de forma aleátória na array, com sizeIndex ele busca a propriedade em questão clicada pelo user, porém a var key é a responsável por me trazer a posição e a propriedade do array em questão  
                                                                                    
         });
 
         c('.pizzaInfo--qt').innerHTML = modalQt;
 
-        c('.pizzaWindowArea').style.opacity = 0;
+        c('.pizzaWindowArea').style.opacity = 0;                         //somente para que o modal nao abra de froma brusca e sim lentamente
         c('.pizzaWindowArea').style.display = 'flex';
         setTimeout(()=>{c('.pizzaWindowArea').style.opacity = 1},300); //opacidade indo de 0 á 1 em 300 milisegundos
     });
@@ -81,3 +87,17 @@ pizzaJson.map( (item, index) => {                                   //o método 
         //c('.pizza-area').append(pizzaItem);    //apeend add o elemento na interface, add extamente 7 graças ao map, a var pizzItem recebeu um clone acima pra poder executar o html 7 vezes de acordo com a quantidade de itens no array
 
 });
+
+
+//Eventos do Modal - Ativando os botôes de cancelar o botão mobile voltar
+function closeModal() {
+
+    c('.pizzaWindowArea').style.opacity = 0;                  //1° passo é colocar opacity = 0; para q o usuário não o veja mais
+    setTimeout(()=>{                                         //2° passo é add o método setTimeout e na função executamos um código no css para colocar o display como none, dessa forma o modal sumirá da tela, removendo-o por completo  
+        c('.pizzaWindowArea').style.display = 'none';
+    }, 500);                                               //essa ocorrerá em 500 milisegundos ou meio segundo
+
+}
+cs('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton').forEach((item)=>{  //aqui chamamos as classes e fizemos um forEach pra poder add nas duas classe, item é apenas o parâmetro da função q vai ser executada
+    item.addEventListener('click', closeModal);                                  //por fim add o evento de escuta que é o click e chamei a function closeModal pra ser executada
+})
