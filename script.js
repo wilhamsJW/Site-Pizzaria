@@ -16,12 +16,13 @@ const c = (el)=>document.querySelector(el);
 const cs = (el)=>document.querySelectorAll(el);
 
 //add elementos no bowser
-pizzaJson.map( (item, index) => {                                  //o método map mapeia cada item do meu array pizzJson, se olhar no console verá isso, map manipula cada objeto do meu array  
-                                                                  //parâmetro item conrresponde  a cada pizza, e o index á numerção de cada array q começa do 0                                      
+pizzaJson.map( (item, index) => {                                   //o método map mapeia cada item do meu array pizzJson, se olhar no console verá isso, map manipula cada objeto do meu array  
+                                                                   //parâmetro item conrresponde  a cada pizza, e o index á numerção de cada array q começa do 0                                      
                           
-    let pizzaItem = c('.models .pizza-item').cloneNode(true);   //.models .pizza-item = uma class dentro de outra class,
-                                                               //o método clodeNode, duplica o elemento ou clona, coloquei todas as pizzas na interface via js
-                        
+    let pizzaItem = c('.models .pizza-item').cloneNode(true);    //.models .pizza-item = uma class dentro de outra class,
+                                                                //o método clodeNode, duplica o elemento ou clona, coloquei todas as pizzas na interface via js
+
+    c('.pizza-area').append(pizzaItem);                       //apeend add o elemento na interface, add extamente 7 graças ao map, a var pizzItem recebeu um clone acima pra poder executar o html 7 vezes de acordo com a quantidade de itens no array
     
     //pizzaItem.setAttribute('data-key', index);            //data-key é o 1º parãmetro, poderia ser qq nome, mas qndo nos refereciamos a data sabemos q é algo relacionado á própria class ou div
     //esta linha de código se encontra abaixo, linha 37.   //index é o 2º parâmetro, index aqui representa as numerações de 0 á 6 do meu array,(só temos 6 objetos), e é o mesmo parãmetro do inicio lá em map, 
@@ -32,16 +33,24 @@ pizzaJson.map( (item, index) => {                                  //o método m
     pizzaItem.querySelector('.pizza-item--name').innerHTML = item.name;         //está add os nomes das pizzas conforme o array pizzaJson, item.name é uma propriedade de pizzaJson, 
     pizzaItem.querySelector('.pizza-item--desc').innerHTML = item.description; //item é o parâmetro e name é a propriedade de pizzaJson
     pizzaItem.querySelector('.pizza-item--price').innerHTML = `R$ ${item.price.toFixed(2)}`;
+    
     pizzaItem.querySelector('a').addEventListener('click', (e) => {              //função criada para o modal(area mostrada após receber um click em cima de uma pizza), ao aparcer vai receber um efeito simples,
 
         e.preventDefault();                                                    //evita um comportamento padrão de carregamento da página ao clickar na foto 
 
-        pizzaItem.setAttribute('data-key', index);                            //explicação acima linha 24.             
+
+
+        //setAttribute e getAttribute me trás as propriedades do array e a posição de cada um.
+        //com isto consegui postar no modal exatamente a pista clickada de forma dinâmica, sem precisar ter que fazer vários modals no css
+
+
+        pizzaItem.setAttribute('data-key', index);                            //explicação acima linha 26.             
         let key = e.target.closest('.pizza-item').getAttribute('data-key');  //target se referencia ao próprio elemento, como aqui se trata de um click, ele sente esse clcik da tag a do href do html, se vc olhar um pouquinho acima de desse bloco verá q ele se referencia a tag a
-        modalQt = 1;                                                                    //closest retorna o ancestral mais próximo, em relação ao elemento atual, que possui o seletor fornecido como parâmetro, o parâmetro dele ou o seletor dele é pizza item, ele irá achar a class pizza-item mais próximo da tag a
+                                                                            //closest retorna o ancestral mais próximo, em relação ao elemento atual, que possui o seletor fornecido como parâmetro, o parâmetro dele ou o seletor dele é pizza item, ele irá achar a class pizza-item mais próximo da tag a
+        modalQt = 1;
                                                                            //por fim dei um getAttribute ou seja estou pegando o atributo data-key q foi criado neste escopo, assim tenho a chave de cada pizza, saberei qual posição do meu array clikado ou qual pizza foi clikada, veja isso no console
 
-        console.log(`PIZZA CLIKADA: ${key}`);                            //este console mostra exatamente qual pizza clikada, com a interação do setAttribute e esta linha de código acima
+        console.log(`PIZZA CLIKADA: ${key}`);                            //este console mostra exatamente qual pizza clikada, com a interação do setAttribute e getAttribute
 
         c('.pizzaBig img').src = pizzaJson[key].img;                    //falta uma img
         c('.pizzaInfo h1').innerHTML = pizzaJson[key].name;            //key é área clikada e também é esta var acima e name é o name do array pizzaJson q contém os nomes de todas as pizzas
@@ -69,6 +78,6 @@ pizzaJson.map( (item, index) => {                                  //o método m
         setTimeout(()=>{c('.pizzaWindowArea').style.opacity = 1},300); //opacidade indo de 0 á 1 em 300 milisegundos
     });
 
-        c('.pizza-area').append(pizzaItem);    //apeend add o elemento na interface, add extamente 7 graças ao map
+        //c('.pizza-area').append(pizzaItem);    //apeend add o elemento na interface, add extamente 7 graças ao map, a var pizzItem recebeu um clone acima pra poder executar o html 7 vezes de acordo com a quantidade de itens no array
 
 });
