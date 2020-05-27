@@ -10,7 +10,7 @@ return document.querySelector(el);
 */
 
 let modalQt = 1;                                                          //var criada para uso do botão mais + do modal, esse botão aumenta a quantidade de pizza pedida ao usuário                                                       
-
+let modalKey = 0;                                                        //sendo usada pra fazer o carrinho de compras
 
 //forma reduzida do código acima
 const c = (el)=>document.querySelector(el);                             //função para substituir o document... posso fazer essa função anõnima sem o uso das chaves, já q é so pra retornar
@@ -56,9 +56,10 @@ pizzaJson.map( (item, index) => {                                   //o método 
                                                                             //closest retorna o ancestral mais próximo, em relação ao elemento atual, que possui o seletor fornecido como parâmetro, o parâmetro dele ou o seletor dele é pizza item, ele irá achar a class pizza-item mais próximo da tag a
                                                                            //por fim dei um getAttribute ou seja estou pegando o atributo data-key q foi criado neste escopo, assim tenho a chave de cada pizza, saberei qual posição do meu array clikado ou qual pizza foi clikada, veja isso no console
 
-        modalQt = 1;                                                       //var criada para uso do botão mais + do modal, esse botão aumenta a quantidade de pizza pedida ao usuário                                                       
-                                                                          //assim q o modal abrir a var está presente aqui resetando o número para um,sem esta var declarada com um, aparecerá a última quantidade escolhida, caso o usuário feche e abre de novo o modal, esta var foi declarada como global
-                                                                        
+        modalQt = 1;                                                          //var criada para uso do botão de soma mais + do modal, esse botão aumenta a quantidade de pizza pedida ao usuário                                                       
+                                                                             //assim q o modal abrir a var está presente aqui resetando o número para um, sem esta var declarada com 1, aparecerá a última quantidade escolhida, caso o usuário feche e abre de novo o modal, esta var foi declarada como global
+                                                                         
+        modalKey = key;                                                    //sendo usada pra guardar a pizza clikada, estou usando ela no carrinho de compras
 
         console.log(`PIZZA CLIKADA: ${key}`);                            //este console mostra exatamente qual pizza clikada, com a interação do setAttribute e getAttribute
 
@@ -123,7 +124,7 @@ c('.pizzaInfo--qtmais').addEventListener('click', ()=>{
 });
 
 
-//Botão Pequeno, Médio e Grande
+//Botão Pequeno, Médio e Grande do Modal
 cs('.pizzaInfo--size').forEach((size, sizeIndex)=>{                         //size é o parâmetro equivalente ao nome de cada pizza clikada ou do item q foi clikado, sizeIndex gera  aposição do array                  
     
     size.addEventListener('click', (e)=>{                                 //pizzaInfo--size.selected é a class q por padrão está sendo add ao botão de pizza grande como marketing, então após o click peco  
@@ -132,3 +133,63 @@ cs('.pizzaInfo--size').forEach((size, sizeIndex)=>{                         //si
     });
 
 });
+
+
+//Carrinho de Compras
+//Temos que inserir aqui 3 informaçôes, Qual é a pizza, o tamanho e a quantas pizzas são.
+//Com os consoles presentes dará pra ver o passo a passo de como obtive as informações para o carrinho
+
+let cart = [];
+c('.pizzaInfo--addButton').addEventListener('click', ()=>{
+
+  //Qual é a pizza?  
+  //console.log(`Pizza: ${modalKey}`);                                     //modalKey guarda a última pizza clikada 
+
+  //Tamanho da pizza?
+  let size = parseInt(c('.pizzaInfo--size.selected').getAttribute('data-key'));  //pizzaInfo--size.selected é a pizza escolhida pelo usuário, é a pizza em questão, eu definir isso quando fiz os botôes P, M e G 
+                                                                                //getAttribute('data-key'); está me trazendo os valores de data-key, esses valores foram definidos no html, dessa forma eu sei qual o tamanho da pizza q o usuário quer pelo data-key
+                                                                               //parseInt apenas pra converter uma string em número inteiro, pq estava como string, vi pelo console 
+  //console.log(`Tamanho: ${size}`);
+
+  //Quantas pizzas?
+  //console.log(`Quantidade: ${modalQt}`);
+
+
+  let indentifier = pizzaJson[modalKey].id + '&' + size;                        //modalKey guarda a última pizza clikada, estou pegando a id direto do pizzaJson, precisamente a id da pizza escolhida armazenada dentro do modalKey, este size é a var criada acima
+
+/*Esta função pode ser assim de maneira tradcional ou conforme 
+  a linha abaixo de forma simplificada  
+  let key = cart.findIndex((item)=>{
+    return item.indentifier == indentifier;
+});
+*/
+
+  let key = cart.findIndex((item)=>item.indentifier == indentifier);           //um função sem as chaves e os parãmetros, como é  uma função de return eu posso fazer isso
+                                                                              //findIndex vai procurar por indetifier e vê se identifier é igual á indentifier,(isto é uma comparação ou uma condição)
+                                                                             //se for igual o findIndex retorna acima de -1 sendo true, se não achar alguém igual a identifier ou ele mesmo, retornará -1 ou false e cairá no else
+                                                                            //ou seja esta comparação pra vê se as pizzas são iguais, pq se for do mesmo sabor e do mesmo tamanho retornará true e apenas somará a quantidade como ordenado no bloco do if       
+  if(key > -1){
+    cart[key].qt += modalQt;                                              //cart[key].qt += modalQt; key é o item ou a pizza q tá sendo igual a ela mesmo, se ela foi igual a ela mesma cairá nesse if, e somará os valores 
+                                                                         //cart[key].qt = quando me referencio a qt o JS já entende q me refrencio á quantidade pois foi declarado dentro de cart.push pela var modalQt, então foi pedido pra somar .qt += a modalQt
+                                                                        //modalQt já tem um valor guardado dentro dele pois é responsável por guardar a quantidade de pizzas pedidas
+
+  } else {                                                            //quem cair aqui vai ser os que me trarão -1 do findIndex, lembrando q -1 é algo padrão do método finIndex, se ele não achar niguém pedido ele retorna -1 ou false
+                                                                     //caindo aqui nesse else irá receber um push pra ser add novos itens ao carrinho, dentro deste objeto coloco o que quero que seja add neste carrinho   
+    cart.push({
+        indentifier,
+        //id:pizzaJson[modalKey].id,                                        //pizzJson é a array q contém todos os itens, está em outro arquivo, modalKey guarda a última pizza clikada e o .id está me trazendo id da pizza q ele achou em pizzaJson
+        size,                                                              //size foi declarada aí em cima
+        qt:modalQt                                                        //modalQt é a var q está sendo usada para guardar a quantidade de pizzas q o usuário pediu, esta var está sendo usada no botão mais 
+    });
+  }
+
+   closeModal();
+});
+
+/**Se olharmos no console o o array cart, veremos q ele está add e guardando as informações corretamente
+ * mas temo um problema, ele não está somando a quantidade de pizzas no carrinho, se o usuário clicka em 
+ * uma pizza e escolhe um tamanho e fecha janela e escolhe outra, o carrinho deveria somar a pizza atual coma
+ * a pizza anterior, ele tá me trazendo dois arrays separados e distintos um do outro
+ */
+
+
