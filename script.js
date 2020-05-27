@@ -199,6 +199,7 @@ c('.pizzaInfo--addButton').addEventListener('click', ()=>{
 function updateCart() {
     if(cart.length > 0) {
         c('aside').classList.add('show');
+        c('.cart').innerHTML = '';                                               //esta linha está zerando os itens do cart append, pq ele estava armazenando valores anteriores e mostrando as escolhas erradas
 
          for(let i in cart) {                                                  //O laço for...in, iterage sobre todos as propriedades enumeráveis do objeto e retorna uma string 
                                                                               //com o nome das propriedades e seus respectivos valores.
@@ -211,9 +212,31 @@ function updateCart() {
                                                                              //item.id == cart[i].id); item.id está se referindo ao id do pizzJson e cart[i].id é da array cart, estou fazendo uma verifiação
                                                                             //pra saber se ambos são iguais ou diferentes, porém vai sempre ser igual pq este for já é pra pizza clikada em questão, com este for
                                                                            //conseguir obter todas as informaçoes de pizzaJson graças ao for in, que percorre todos os campos da array e ao método find que me retornou propriedade e valores
-                                                                                
+                        
+                let cartItem = c('.models .cart--item').cloneNode(true);        //c('.models .cart--item') class do html sendo clonada
 
-                console.log(pizzaItem);                                 //neste console posso ver q ao clikar no botão add carrinho, pizzaItem já tem todas as informções da pizza pra ser usada no carrinho mostrada ao usuário tbm
+                let pizzaSizeName;                                //irá mostrar o tamanho da pizza, porém temos 3 tamanhos diferentes e não podemos mostrar isso através dos valores da array de 0 á 2
+                switch(cart[i].size) {                           //cart[i] é a posição atual do array, é a pizza em questão, size foi declarado á cima na array cart como o tamanho da pizza,
+                    case 0:                                     //criei 3 casos pq temos o mesmo valor para o mesmo item que  é tamanho, então quando for 0 será = 'P e assim por diante
+                        pizzaSizeName = 'P';
+                        break;
+                    case 1:
+                        pizzaSizeName = 'M';
+                        break;
+                    case 2:
+                        pizzaSizeName = 'G';
+                        break;         
+                }
+
+                let pizzaName = `${pizzaItem.name} (${pizzaSizeName})`;                     //obtive esses valores aqui pq a var acima pizzItem está obtendo através do método find todas as propriedades e valores da pizza ou da array pizzaJson
+
+                cartItem.querySelector('img').src = pizzaItem.img;                        //add a img da pizza  
+                cartItem.querySelector('.cart--item-nome').innerHTML = pizzaName;        //add o nome da pizza e o tamanho, criei esta var acima
+                cartItem.querySelector('.cart--item--qt').innerHTML = cart[i].qt;
+
+                c('.cart').append(cartItem);                                //mostrando no carrinho a escolha da pizza e a quantidade                                                         
+
+                //console.log(pizzaItem);                                 //neste console posso ver q ao clikar no botão add carrinho, pizzaItem já tem todas as informções da pizza pra ser usada no carrinho mostrada ao usuário tbm
             
          }
 
