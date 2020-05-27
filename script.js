@@ -176,14 +176,17 @@ c('.pizzaInfo--addButton').addEventListener('click', ()=>{
   } else {                                                            //quem cair aqui vai ser os que me trarão -1 do findIndex, lembrando q -1 é algo padrão do método finIndex, se ele não achar niguém pedido ele retorna -1 ou false
                                                                      //caindo aqui nesse else irá receber um push pra ser add novos itens ao carrinho, dentro deste objeto coloco o que quero que seja add neste carrinho   
     cart.push({
-        indentifier,
-        //id:pizzaJson[modalKey].id,                                        //pizzJson é a array q contém todos os itens, está em outro arquivo, modalKey guarda a última pizza clikada e o .id está me trazendo id da pizza q ele achou em pizzaJson
+        id:pizzaJson[modalKey].id,     //ATENÇÃO:  id:pizzaJson[modalKey].id, ESTA LINHA EU HAVIA TIRADO PQ NÃO VI MUITA NECESSIDADE DELA, MAS ELA ESTÁ ME TRAZENDO TODAS AS PROPRIEDADE DA PIZZA CLIKADA, E ISSO TÁ SENDO DE MUITA IMPORTANÇIA PARA A VISUALIZAÇÃO DO CARRINHO
+                                                //E SÓ CONSEGUIR VER PELO CONSOLE OS NOMES E OUTRAS PROPRIEDADE DA PIZZANO CONSOLE DA FUNÇÃO UPDATECART PQ ATIVEI ESSA LINHA DE NOVO, ESTA LINHA ESTÁ CONTRIBUINDO PARA VISUALIZAÇÃO DE QUAL FOI PIZZA FOI ESCOLHIDA PELO USUÁRIO, DESSA FORMA CONSIGO COLOCAR 
+                                               //PRA VISUALIZAÇÃO NO CARRINHO PARA O USUÁRIO VER QUAL PISTA ELE ESCOLHEU  
+                                              //pizzJson é a array q contém todos os itens, está em outro arquivo, modalKey guarda a última pizza clikada e o .id está me trazendo id da pizza q ele achou em pizzaJson
+        indentifier,                                          
         size,                                                              //size foi declarada aí em cima
         qt:modalQt                                                        //modalQt é a var q está sendo usada para guardar a quantidade de pizzas q o usuário pediu, esta var está sendo usada no botão mais 
     });
   }
-
-   closeModal();
+   updateCart();  //atualiza o carrinho
+   closeModal(); //fecha modal
 });
 
 /**Se olharmos no console o o array cart, veremos q ele está add e guardando as informações corretamente
@@ -191,5 +194,32 @@ c('.pizzaInfo--addButton').addEventListener('click', ()=>{
  * uma pizza e escolhe um tamanho e fecha janela e escolhe outra, o carrinho deveria somar a pizza atual coma
  * a pizza anterior, ele tá me trazendo dois arrays separados e distintos um do outro
  */
+
+//ATUALIZAÇÕES DO CARRINHO 
+function updateCart() {
+    if(cart.length > 0) {
+        c('aside').classList.add('show');
+
+         for(let i in cart) {                                                  //O laço for...in, iterage sobre todos as propriedades enumeráveis do objeto e retorna uma string 
+                                                                              //com o nome das propriedades e seus respectivos valores.
+/**Forma tradicional e forma simplificada abaixo
+ * let pizzaItem = pizzaJson.find((item)=>{
+    return item.id = cart[i].id;
+});
+ */         //Forma Simplificada
+            let pizzaItem = pizzaJson.find((item)=>item.id == cart[i].id);    //com o find obtivemos todas as propriedades e valores da array pizzaJson, tais como: Nome, imagem, preço etc..
+                                                                             //item.id == cart[i].id); item.id está se referindo ao id do pizzJson e cart[i].id é da array cart, estou fazendo uma verifiação
+                                                                            //pra saber se ambos são iguais ou diferentes, porém vai sempre ser igual pq este for já é pra pizza clikada em questão, com este for
+                                                                           //conseguir obter todas as informaçoes de pizzaJson graças ao for in, que percorre todos os campos da array e ao método find que me retornou propriedade e valores
+                                                                                
+
+                console.log(pizzaItem);                                 //neste console posso ver q ao clikar no botão add carrinho, pizzaItem já tem todas as informções da pizza pra ser usada no carrinho mostrada ao usuário tbm
+            
+         }
+
+    } else {
+        c('aside').classList.remove('show');
+    }
+}
 
 
