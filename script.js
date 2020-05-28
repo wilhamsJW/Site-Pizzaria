@@ -201,6 +201,11 @@ function updateCart() {
         c('aside').classList.add('show');
         c('.cart').innerHTML = '';                                               //esta linha está zerando os itens do cart append, pq ele estava armazenando valores anteriores e mostrando as escolhas erradas
 
+        
+        let subtotal = 0;
+        let desconto = 0;
+        let total = 0;
+
          for(let i in cart) {                                                  //O laço for...in, iterage sobre todos as propriedades enumeráveis do objeto e retorna uma string 
                                                                               //com o nome das propriedades e seus respectivos valores.
 /**Forma tradicional e forma simplificada abaixo
@@ -212,6 +217,8 @@ function updateCart() {
                                                                              //item.id == cart[i].id); item.id está se referindo ao id do pizzJson e cart[i].id é da array cart, estou fazendo uma verifiação
                                                                             //pra saber se ambos são iguais ou diferentes, porém vai sempre ser igual pq este for já é pra pizza clikada em questão, com este for
                                                                            //conseguir obter todas as informaçoes de pizzaJson graças ao for in, que percorre todos os campos da array e ao método find que me retornou propriedade e valores
+
+                subtotal += pizzaItem.price * cart[i].qt;                 //calculando subtotal, qt é a quantidade declarada em cart                                                          
                         
                 let cartItem = c('.models .cart--item').cloneNode(true);        //c('.models .cart--item') class do html sendo clonada
 
@@ -233,6 +240,8 @@ function updateCart() {
                 cartItem.querySelector('img').src = pizzaItem.img;                        //add a img da pizza  
                 cartItem.querySelector('.cart--item-nome').innerHTML = pizzaName;        //add o nome da pizza e o tamanho, criei esta var acima
                 cartItem.querySelector('.cart--item--qt').innerHTML = cart[i].qt;
+
+
 
                 //Funcionalidade dos Botôes + e -
                 cartItem.querySelector('.cart--item-qtmenos').addEventListener('click', ()=>{
@@ -256,6 +265,15 @@ function updateCart() {
                 //console.log(pizzaItem);                                 //neste console posso ver q ao clikar no botão add carrinho, pizzaItem já tem todas as informções da pizza pra ser usada no carrinho mostrada ao usuário tbm
             
          }
+
+         desconto = subtotal * 0.1;                                    //0.1 foi o desconto de 10%
+         total = subtotal - desconto;
+
+         //Exibindo Subtotal, Desconto e Total
+         c('.subtotal span:last-child').innerHTML = ` R$ ${subtotal.toFixed(2)} `;             //coloquei last child pq tenho duas tags span, porém quero que pegue á ultima, last-child me retorna o último filho ou eleemnto
+         c('.desconto span:last-child').innerHTML = ` R$ ${desconto.toFixed(2)} `;
+         c('.total span:last-child').innerHTML    = ` R$ ${total.toFixed(2)} `;
+
 
     } else {
         c('aside').classList.remove('show');
