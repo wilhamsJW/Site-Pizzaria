@@ -234,6 +234,23 @@ function updateCart() {
                 cartItem.querySelector('.cart--item-nome').innerHTML = pizzaName;        //add o nome da pizza e o tamanho, criei esta var acima
                 cartItem.querySelector('.cart--item--qt').innerHTML = cart[i].qt;
 
+                //Funcionalidade dos Botôes + e -
+                cartItem.querySelector('.cart--item-qtmenos').addEventListener('click', ()=>{
+
+                    if (cart[i].qt > 1) {
+                        cart[i].qt--;
+                    } else {
+                        cart.splice(i, 1);                             //splice 1° parâmetro é a posição do array e o 2º é a quantidade de item a ser excluído
+                    }                                                 //splice excluiu a pizza indesejada
+                        
+                    updateCart(); //fecha o carrinho                        
+                });    
+                cartItem.querySelector('.cart--item-qtmais').addEventListener('click', ()=>{
+                    cart[i].qt++;
+                    updateCart();                                               //vai fechar o carrinho se não tiver itens      
+                });   
+
+
                 c('.cart').append(cartItem);                                //mostrando no carrinho a escolha da pizza e a quantidade                                                         
 
                 //console.log(pizzaItem);                                 //neste console posso ver q ao clikar no botão add carrinho, pizzaItem já tem todas as informções da pizza pra ser usada no carrinho mostrada ao usuário tbm
