@@ -195,8 +195,23 @@ c('.pizzaInfo--addButton').addEventListener('click', ()=>{
  * a pizza anterior, ele tá me trazendo dois arrays separados e distintos um do outro
  */
 
+//Evento botão mobile, para aparecer o carrinho mobile
+c('.menu-openner').addEventListener('click', ()=>{
+
+    if(cart.length > 0){
+    c('aside').style.left = '0';
+    };                                         //está no css dessa forma  left:100vw; alterei para 0 para aparecer o carrinho por completo
+})
+//fechando o carrinho mobile
+c('.menu-closer').addEventListener('click', ()=>{
+    c('aside').style.left = '100vw';
+});
+
+
 //ATUALIZAÇÕES DO CARRINHO 
 function updateCart() {
+    c('.menu-openner span').innerHTML = cart.length;                                //botão do mobile que tem um símbolo do carrinho para mostrar a quantidade escolhida pelo usuário
+
     if(cart.length > 0) {
         c('aside').classList.add('show');
         c('.cart').innerHTML = '';                                               //esta linha está zerando os itens do cart append, pq ele estava armazenando valores anteriores e mostrando as escolhas erradas
@@ -276,7 +291,8 @@ function updateCart() {
 
 
     } else {
-        c('aside').classList.remove('show');
+        c('aside').classList.remove('show');              //removendo a classList q mostra o carrinho quando chega em zero
+        c('aside').style.left = '100vw';                 //estou fechando o carrinho do  mobile quando chega em zero
     }
 }
 

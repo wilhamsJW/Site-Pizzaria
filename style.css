@@ -357,7 +357,7 @@ h1 {
     aside {
         width:auto;
         position:fixed;
-        left:100vw;
+        left:100vw;       /*Isso siginifica que ele não vai aparecer no mobile, está todo pra esquerda se escondendo do usuário, se coloco 0 ele aparecerá*/     
         right:0;
         top:0;
         bottom:0;
